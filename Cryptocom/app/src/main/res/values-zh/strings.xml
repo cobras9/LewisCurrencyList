@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Crypto.com</string>
+    <string name="title_currency_list">幣列表</string>
+    <string name="button_load">載入</string>
+    <string name="button_sort">排序</string>
+    <string name="title_home">首頁</string>
+    <string name="description_load">請點選載入</string>
+</resources>

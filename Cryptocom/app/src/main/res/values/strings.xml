@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Crypto.com</string>
+    <string name="title_currency_list">Currencies</string>
+    <string name="button_load">Load</string>
+    <string name="button_sort">Sort</string>
+    <string name="title_home">Home</string>
+    <string name="description_load">Please click LOAD, to load currency list</string>
+</resources>
