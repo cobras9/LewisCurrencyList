@@ -1,23 +1,29 @@
 package com.devilsvirtue.cryptocom.data
 
+import com.devilsvirtue.cryptocom.domain.bo.CurrencyBo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 interface CurrencyRepository {
-    suspend fun loadAllCurrency(): Flow<List<Currency>>
     suspend fun insertAllCurrency(list: List<Currency>)
-    suspend fun sortCurrency(isAsc: Boolean?): Flow<List<Currency>>
+    suspend fun loadCurrencyByName(isAsc: Boolean?): Flow<List<CurrencyBo>>
 }
 
 class CurrencyRepositoryImpl @Inject constructor(
     private val currencyDao: CurrencyDao,
 ) : CurrencyRepository {
-    override suspend fun loadAllCurrency(): Flow<List<Currency>> {
-        return currencyDao.loadAll()
-    }
-
-    override suspend fun sortCurrency(isAsc: Boolean?): Flow<List<Currency>> {
-        return currencyDao.sortCurrencyByName(isAsc)
+    override suspend fun loadCurrencyByName(isAsc: Boolean?): Flow<List<CurrencyBo>> {
+        return flow {
+            currencyDao.loadCurrencyByName(isAsc).collect { dbList ->
+                emit(
+                    dbList.map {
+                        it.mapDbToBo()
+                    }
+                )
+            }
+        }
     }
 
     override suspend fun insertAllCurrency(list: List<Currency>) {

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devilsvirtue.cryptocom.data.Currency
 import com.devilsvirtue.cryptocom.data.CurrencyUseCase
-import com.devilsvirtue.cryptocom.data.mapDbToUio
 import com.devilsvirtue.cryptocom.ui.uio.CurrencyUio
 import com.devilsvirtue.cryptocom.util.IoDispatcher
 import com.google.gson.Gson
@@ -32,15 +31,18 @@ class DemoViewModel @Inject constructor(
         MutableLiveData<List<CurrencyUio>>()
     val currencyList: LiveData<List<CurrencyUio>>
         get() = currencyData
-
-    suspend fun loadCurrency() {
+    private var currentSortOrder = false
+    suspend fun loadCurrencyByName(isAsc: Boolean) {
         viewModelScope.launch(ioDispatcher) {
-            currencyUseCase.loadAllCurrency().collect { dbCurrencyList ->
-                currencyData.postValue(dbCurrencyList.map {
-                    it.mapDbToUio()
-                })
+            currentSortOrder = isAsc // resetting sort order
+            currencyUseCase.loadCurrencyByName(isAsc).collect {
+                currencyData.postValue(it)
             }
         }
+    }
+
+    suspend fun sortCurrencyByName() {
+        loadCurrencyByName(!currentSortOrder)
     }
 
     suspend fun insertAllCurrency() {

@@ -1,6 +1,5 @@
 package com.devilsvirtue.cryptocom.data
 
-import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,9 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrencyDao {
-
-    @Query("SELECT * FROM currency ORDER BY id DESC")
-    fun loadAll(): Flow<List<Currency>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(currency: List<Currency?>?)
@@ -29,6 +25,5 @@ interface CurrencyDao {
                 "CASE WHEN :isAsc = 1 THEN name END ASC, " +
                 "CASE WHEN :isAsc = 0 THEN name END DESC"
     )
-    fun sortCurrencyByName(isAsc: Boolean?): Flow<List<Currency>>
-
+    fun loadCurrencyByName(isAsc: Boolean?): Flow<List<Currency>>
 }

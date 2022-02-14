@@ -17,7 +17,6 @@ import com.devilsvirtue.cryptocom.util.Keys
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,12 +50,13 @@ class DemoActivity : AppCompatActivity() {
 
         binding.sortCurrency.setOnClickListener {
             viewModel.viewModelScope.launch(ioDispatcher) {
-                viewModel.insertAllCurrency()
+                //viewModel.insertAllCurrency()
+                viewModel.sortCurrencyByName()
             }
         }
         binding.loadCurrency.setOnClickListener {
             viewModel.viewModelScope.launch(ioDispatcher) {
-                viewModel.loadCurrency()
+                viewModel.loadCurrencyByName(isAsc = true)
             }
         }
 
