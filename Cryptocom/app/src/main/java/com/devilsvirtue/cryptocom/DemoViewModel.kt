@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devilsvirtue.cryptocom.data.Currency
 import com.devilsvirtue.cryptocom.data.CurrencyUseCase
+import com.devilsvirtue.cryptocom.ui.LoadingState
 import com.devilsvirtue.cryptocom.ui.uio.CurrencyUio
 import com.devilsvirtue.cryptocom.util.IoDispatcher
 import com.google.gson.Gson
@@ -14,6 +15,8 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -31,12 +34,19 @@ class DemoViewModel @Inject constructor(
         MutableLiveData<List<CurrencyUio>>()
     val currencyList: LiveData<List<CurrencyUio>>
         get() = currencyData
+
+    private val _stateFlow = MutableStateFlow<LoadingState>(LoadingState.Idle)
+    val currencyListStateFlow = _stateFlow.asStateFlow()
     private var currentSortOrder = false
     suspend fun loadCurrencyByName(isAsc: Boolean) {
         viewModelScope.launch(ioDispatcher) {
+            _stateFlow.tryEmit(LoadingState.InProgress)
             currentSortOrder = isAsc // resetting sort order
             currencyUseCase.loadCurrencyByName(isAsc).collect {
-                currencyData.postValue(it)
+                // Using ViewModel observe
+                // currencyData.postValue(it)
+                //Using sate
+                _stateFlow.tryEmit(LoadingState.Success(it))
             }
         }
     }
