@@ -6,12 +6,13 @@
 3) Layers (V)
 4) Models (V)
 5) UI (V)
+6) Sort
+7) fast clicks handling
 
 Todo list:
-1) Sort
-2) fast clicks handling
-3) clean up
-4) Tests (Unit/UI)
+
+1) clean up
+2) Tests (Unit/UI)
 
 First time using room, I have used DBFlow about 4 years ago, but with banking apps, 
 we weren't really allowed to used database to save any of the customer data
